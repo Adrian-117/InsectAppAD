@@ -1,4 +1,4 @@
-plugins {
+plugins {    
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     
@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.ksp) // 👈 Apply the plugin here
 
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -66,7 +67,10 @@ dependencies {
 implementation("com.google.android.material:material:1.12.0")
 
 // Navigation Compose
-    implementation("androidx.navigation:navigation-compose:2.8.5")
+
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
+
 
     // ViewModel Compose
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
