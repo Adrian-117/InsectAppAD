@@ -71,3 +71,6 @@ kotlin-ide/
 .claude/settings.local.json
 **/xcuserdata
 .test-federation.*
+app/release/
+mi-llave.jks
+shit.txt

@@ -1,6 +1,10 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    
+    
+    alias(libs.plugins.ksp) // 👈 Apply the plugin here
+
     alias(libs.plugins.kotlin.compose)
 }
 
@@ -58,4 +62,29 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+    implementation("androidx.appcompat:appcompat:1.6.1") // Use the latest stable version
+implementation("com.google.android.material:material:1.12.0")
+
+// Navigation Compose
+    implementation("androidx.navigation:navigation-compose:2.8.5")
+
+    // ViewModel Compose
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
+
+    // Coil para carga de imágenes
+    implementation("io.coil-kt:coil-compose:2.7.0")
+
+implementation(libs.androidx.animation)
+
+    val roomVersion = "2.6.1"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion") // Soporte para Coroutines y Flow
+    ksp("androidx.room:room-compiler:$roomVersion") // Procesador de anotaciones
+
+    // 5. Desugaring para java.time (LocalDateTime en API < 26)
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+
+
+
+
 }
