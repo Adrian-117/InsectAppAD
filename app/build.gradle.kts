@@ -1,8 +1,7 @@
-plugins {    
+plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    
-    
+
     alias(libs.plugins.ksp) // 👈 Apply the plugin here
 
     alias(libs.plugins.kotlin.compose)
@@ -30,7 +29,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -64,13 +63,12 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     implementation("androidx.appcompat:appcompat:1.6.1") // Use the latest stable version
-implementation("com.google.android.material:material:1.12.0")
+    implementation("com.google.android.material:material:1.12.0")
 
 // Navigation Compose
 
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
-
 
     // ViewModel Compose
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
@@ -78,7 +76,7 @@ implementation("com.google.android.material:material:1.12.0")
     // Coil para carga de imágenes
     implementation("io.coil-kt:coil-compose:2.7.0")
 
-implementation(libs.androidx.animation)
+    implementation(libs.androidx.animation)
 
     val roomVersion = "2.6.1"
     implementation("androidx.room:room-runtime:$roomVersion")
@@ -88,7 +86,11 @@ implementation(libs.androidx.animation)
     // 5. Desugaring para java.time (LocalDateTime en API < 26)
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 
-
-
-
+// Ktor Client
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.android)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.client.logging)
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
 }
