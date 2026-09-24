@@ -26,6 +26,7 @@ class MainViewModel : ViewModel() {
                 val insect = InsectApi.getRandomInsect()
                 _generatedInsect.value = insect
             } catch (e: Exception) {
+                android.util.Log.e("insectapp", "Error generating insect", e)
                 _error.value = e.message ?: "An unknown error occurred"
             } finally {
                 _isLoading.value = false
