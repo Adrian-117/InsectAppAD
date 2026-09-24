@@ -11,21 +11,51 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = BrightLeafGreen,
+    onPrimary = DarkGreenBackground,
+    primaryContainer = ForestGreen,
+    onPrimaryContainer = LightGreen,
+    secondary = EarthGreenLight,
+    onSecondary = DarkOliveBackground,
+    secondaryContainer = OliveContainer,
+    onSecondaryContainer = LightOlive,
+    tertiary = BrightAmber,
+    onTertiary = DarkAmberBackground,
+    tertiaryContainer = BrownContainer,
+    onTertiaryContainer = AmberContainer,
+    background = DarkBackground,
+    onBackground = LightEarthText,
+    surface = DarkBackground,
+    onSurface = LightEarthText,
+    surfaceVariant = SurfaceVariantDark,
+    onSurfaceVariant = OnSurfaceVariantDark
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = LeafGreen,
+    onPrimary = LightBackground, // Or White
+    primaryContainer = LightGreen,
+    onPrimaryContainer = DarkGreenText,
+    secondary = EarthBrown,
+    onSecondary = LightBackground,
+    secondaryContainer = LightOlive,
+    onSecondaryContainer = DarkOliveText,
+    tertiary = AmberAccent,
+    onTertiary = LightBackground,
+    tertiaryContainer = AmberContainer,
+    onTertiaryContainer = DarkAmberText,
+    background = LightBackground,
+    onBackground = DarkEarthText,
+    surface = LightBackground,
+    onSurface = DarkEarthText,
+    surfaceVariant = SurfaceVariantLight,
+    onSurfaceVariant = OnSurfaceVariantLight
 )
 
 @Composable
 fun RandomInsectTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false, // Let's disable dynamic colors to enforce the insect theme
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

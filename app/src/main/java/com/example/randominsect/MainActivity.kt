@@ -5,6 +5,10 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.lifecycleScope
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import com.example.randominsect.data.ThemePreferences
 import com.example.randominsect.data.AppContextProvider
 import com.example.randominsect.data.api.InsectApi
 import com.example.randominsect.data.db.InsectDatabase
@@ -52,7 +56,10 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
         setContent {
-            RandomInsectTheme {
+            val isDarkModePref by ThemePreferences.isDarkMode.collectAsState(initial = null)
+            val isDarkTheme = isDarkModePref ?: isSystemInDarkTheme()
+
+            RandomInsectTheme(darkTheme = isDarkTheme) {
                 AppNavigation()
             }
         }

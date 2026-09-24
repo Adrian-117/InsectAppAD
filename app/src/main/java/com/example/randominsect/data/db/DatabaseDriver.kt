@@ -19,7 +19,7 @@ import android.util.Log
         BlackListEntity::class,
         InsectEntity::class,        
     ],
-    version = 4, // Version bump forces schema reset
+    version = 5, // Version bump forces schema reset
     exportSchema = false
 )
 abstract class InsectDatabase : RoomDatabase() {
