@@ -6,8 +6,11 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "favorite_insects")
 data class InsectEntity(
-    @PrimaryKey
-    val id: Long,
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
+
+    @ColumnInfo(name = "taxon_id")
+    val taxonID: Long,
 
     @ColumnInfo(name = "common_name")
     val commonName: String?,
