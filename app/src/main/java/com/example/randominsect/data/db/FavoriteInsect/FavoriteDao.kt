@@ -40,4 +40,7 @@ interface FavoritesDao {
 
     @Query("DELETE FROM favorite_insects")
     suspend fun clearAllFavorites()
+
+    @Query("SELECT EXISTS(SELECT 1 FROM favorite_insects WHERE taxon_id = :taxonId LIMIT 1)")
+    suspend fun isTaxonFavorite(taxonId: Long): Boolean
 }

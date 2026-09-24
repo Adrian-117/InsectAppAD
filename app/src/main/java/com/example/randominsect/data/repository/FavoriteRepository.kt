@@ -56,6 +56,11 @@ class FavoriteRepository private constructor(
         favoritesDao.clearAllFavorites()
     }
 
+    suspend fun isTaxonFavorite(taxonID:Long): Boolean {
+        return favoritesDao.isTaxonFavorite(taxonID)
+    }
+    
+
     companion object {
         @Volatile
         private var INSTANCE: FavoriteRepository? = null
