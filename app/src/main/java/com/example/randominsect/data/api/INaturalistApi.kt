@@ -81,7 +81,7 @@ object InsectApi {
                     parameter("without_taxon_id",insects_to_exclude )
                     parameter(
                         "fields",
-                        "(taxon:(name:!t,preferred_common_name:!t,wikipedia_url:!t,default_photo:(medium_url:!t)))",
+                        "(taxon:(id:!t,name:!t,preferred_common_name:!t,wikipedia_url:!t,default_photo:(medium_url:!t)))"
                     )
                 }.body()
 
@@ -92,7 +92,7 @@ object InsectApi {
         val result = rootJson["results"]?.jsonArray?.firstOrNull()?.jsonObject ?: return null
         val taxon = result["taxon"]?.jsonObject
 
-        val id = result["id"]?.jsonPrimitive?.longOrNull ?: 0L
+        val taxonID = result["id"]?.jsonPrimitive?.longOrNull ?: 0L
         val commonName = taxon?.get("preferred_common_name")?.jsonPrimitive?.content
         val wikipediaUrl = taxon?.get("wikipedia_url")?.jsonPrimitive?.content
         val scientificName = taxon?.get("name")?.jsonPrimitive?.content
@@ -110,7 +110,7 @@ object InsectApi {
 
         if (mediumUrl != null) {
 
-            localImageFile = File(this.appContext?.cacheDir, "insect_$id.jpg")
+            localImageFile = File(this.appContext?.cacheDir, "insect_$taxonID.jpg")
 
             val bytes: ByteArray = client.get(mediumUrl).body()
             localImageFile.writeBytes(bytes)
@@ -118,12 +118,15 @@ object InsectApi {
             imagePath = localImageFile.absolutePath
         }
 
-        return InsectEntity(
-            id = id,
+        val insect = InsectEntity(
+            taxonID = taxonID,
             commonName = commonName,
             scientificName = scientificName,
             wikipedia_url = wikipediaUrl,
-            image_path = imagePath,
+            image_path = imagePath
         )
+        Log.d("insectapp","Insect from api is $insect")
+
+        return insect
     }
 }
