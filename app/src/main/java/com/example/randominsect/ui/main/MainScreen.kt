@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -49,6 +50,9 @@ fun MainScreen(
     val isSaved by viewModel.isCurrentInsectSaved.collectAsState()
     val isSaving by viewModel.isSaving.collectAsState()
     val error by viewModel.error.collectAsState()
+    val uriHandler = LocalUriHandler.current
+
+
 
     Column(
         modifier = Modifier
@@ -160,6 +164,28 @@ fun MainScreen(
                         isSaving = isSaving,
                         onClick = { viewModel.saveCurrentInsectToFavorites() }
                     )
+
+                    val wikiUrl = insect?.wikipedia_url
+                    if (!wikiUrl.isNullOrBlank()) {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Button(
+                            onClick = {
+                                try {
+                                    uriHandler.openUri(wikiUrl)
+                                } catch (e: Exception) {
+                                    android.util.Log.e("MainScreen", "Error opening Wikipedia URL: $wikiUrl", e)
+                                }
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
+                            shape = RoundedCornerShape(8.dp)
+                        ) {
+                            Text(
+                                text = "Link",
+                                color = MaterialTheme.colorScheme.onSecondary,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
                 }
             }
         }
