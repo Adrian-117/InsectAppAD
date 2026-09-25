@@ -10,10 +10,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,7 +47,12 @@ fun MainScreen(
 ) {
     val insect by viewModel.generatedInsect.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+    val isSaved by viewModel.isCurrentInsectSaved.collectAsState()
+    val isSaving by viewModel.isSaving.collectAsState()
+    val error by viewModel.error.collectAsState()
     val uriHandler = LocalUriHandler.current
+
+
 
     Column(
         modifier = Modifier
@@ -86,7 +98,7 @@ fun MainScreen(
                 )
             }
         }
-        
+
         HorizontalDivider(color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f), thickness = 1.dp)
 
         // Center Content
@@ -106,7 +118,9 @@ fun MainScreen(
             } else {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.padding(24.dp)
+                    modifier = Modifier
+                        .verticalScroll(rememberScrollState())
+                        .padding(24.dp)
                 ) {
                     // Display image if image_path exists
                     insect?.image_path?.let { path ->
@@ -143,6 +157,14 @@ fun MainScreen(
                         )
                     }
 
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    AddToFavoritesButton(
+                        isSaved = isSaved,
+                        isSaving = isSaving,
+                        onClick = { viewModel.saveCurrentInsectToFavorites() }
+                    )
+
                     val wikiUrl = insect?.wikipedia_url
                     if (!wikiUrl.isNullOrBlank()) {
                         Spacer(modifier = Modifier.height(16.dp))
@@ -168,6 +190,19 @@ fun MainScreen(
             }
         }
 
+        // Error message (generation or saving failures)
+        error?.let { message ->
+            Text(
+                text = message,
+                color = MaterialTheme.colorScheme.error,
+                fontSize = 14.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+            )
+        }
+
         // Navigation Footer
         Row(
             modifier = Modifier
@@ -189,5 +224,50 @@ fun MainScreen(
                 Text("Settings", color = MaterialTheme.colorScheme.onSecondary)
             }
         }
+    }
+}
+
+/**
+ * Botón para guardar el insecto actual.
+ *  - Normal:   "Add to Favorites"      (corazón vacío, habilitado)
+ *  - Guardando: "Saving..."            (deshabilitado)
+ *  - Guardado:  "Saved to Favorites"   (corazón lleno, deshabilitado)
+ */
+@Composable
+private fun AddToFavoritesButton(
+    isSaved: Boolean,
+    isSaving: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val colors = MaterialTheme.colorScheme
+
+    Button(
+        onClick = onClick,
+        enabled = !isSaved && !isSaving,
+        shape = RoundedCornerShape(8.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = colors.primary,
+            contentColor = colors.onPrimary,
+            disabledContainerColor = if (isSaved) colors.primaryContainer else colors.onSurface.copy(alpha = 0.12f),
+            disabledContentColor = if (isSaved) colors.onPrimaryContainer else colors.onSurface.copy(alpha = 0.38f)
+        ),
+        modifier = modifier
+    ) {
+        Icon(
+            imageVector = if (isSaved) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+            contentDescription = null,
+            modifier = Modifier.size(18.dp)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = when {
+                isSaved -> "Saved to Favorites"
+                isSaving -> "Saving..."
+                else -> "Add to Favorites"
+            },
+            fontWeight = FontWeight.Bold,
+            fontSize = 14.sp
+        )
     }
 }
